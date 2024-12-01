@@ -113,13 +113,14 @@ public class CWE89_SQL_Injection__database_executeUpdate_06 extends AbstractTest
         if (PRIVATE_STATIC_FINAL_FIVE==5)
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeUpdate(), which could result in SQL Injection */
-                int rowCount = sqlStatement.executeUpdate("insert into users (status) values ('updated') where name='"+data+"'");
+                sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
+                
+                sqlStatement.setString(1, data);
+                int rowCount = sqlStatement.execute();
                 IO.writeLine("Updated " + rowCount + " rows successfully.");
             }
             catch (SQLException exceptSql)
@@ -176,13 +177,14 @@ public class CWE89_SQL_Injection__database_executeUpdate_06 extends AbstractTest
         if (PRIVATE_STATIC_FINAL_FIVE==5)
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeUpdate(), which could result in SQL Injection */
-                int rowCount = sqlStatement.executeUpdate("insert into users (status) values ('updated') where name='"+data+"'");
+                sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
+                
+                sqlStatement.setString(1, data);
+                int rowCount = sqlStatement.execute();
                 IO.writeLine("Updated " + rowCount + " rows successfully.");
             }
             catch (SQLException exceptSql)
@@ -237,13 +239,14 @@ public class CWE89_SQL_Injection__database_executeUpdate_06 extends AbstractTest
         if (PRIVATE_STATIC_FINAL_FIVE==5)
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeUpdate(), which could result in SQL Injection */
-                int rowCount = sqlStatement.executeUpdate("insert into users (status) values ('updated') where name='"+data+"'");
+                sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
+                
+                sqlStatement.setString(1, data);
+                int rowCount = sqlStatement.execute();
                 IO.writeLine("Updated " + rowCount + " rows successfully.");
             }
             catch (SQLException exceptSql)

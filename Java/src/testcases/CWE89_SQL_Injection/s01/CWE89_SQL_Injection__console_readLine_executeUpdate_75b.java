@@ -16,6 +16,7 @@ Template File: sources-sinks-75b.tmpl.java
  * */
 
 package testcases.CWE89_SQL_Injection.s01;
+import java.sql.PreparedStatement;
 import testcasesupport.*;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
@@ -39,19 +40,19 @@ public class CWE89_SQL_Injection__console_readLine_executeUpdate_75b
         {
             streamByteArrayInput = new ByteArrayInputStream(dataSerialized);
             streamObjectInput = new ObjectInputStream(streamByteArrayInput);
-            String data = (String)streamObjectInput.readObject();
 
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
 
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
+                sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
 
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeUpdate(), which could result in SQL Injection */
-                int rowCount = sqlStatement.executeUpdate("insert into users (status) values ('updated') where name='"+data+"'");
+                
+                sqlStatement.setString(1, (String)streamObjectInput.readObject());
 
+                int rowCount = sqlStatement.execute();
                 IO.writeLine("Updated " + rowCount + " rows successfully.");
             }
             catch (SQLException exceptSql)
@@ -133,19 +134,19 @@ public class CWE89_SQL_Injection__console_readLine_executeUpdate_75b
         try {
             streamByteArrayInput = new ByteArrayInputStream(dataSerialized);
             streamObjectInput = new ObjectInputStream(streamByteArrayInput);
-            String data = (String)streamObjectInput.readObject();
 
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
 
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
+                sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
 
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeUpdate(), which could result in SQL Injection */
-                int rowCount = sqlStatement.executeUpdate("insert into users (status) values ('updated') where name='"+data+"'");
+                
+                sqlStatement.setString(1, (String)streamObjectInput.readObject());
 
+                int rowCount = sqlStatement.execute();
                 IO.writeLine("Updated " + rowCount + " rows successfully.");
             }
             catch (SQLException exceptSql)

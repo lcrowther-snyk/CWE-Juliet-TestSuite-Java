@@ -106,21 +106,21 @@ public class CWE89_SQL_Injection__database_executeQuery_42 extends AbstractTestC
 
     public void bad() throws Throwable
     {
-        String data = badSource();
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
         ResultSet resultSet = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-            resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
+            
+            sqlStatement.setString(1, badSource());
 
-            IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+            resultSet = sqlStatement.execute();
+            IO.writeLine(resultSet.getRow());
         }
         catch (SQLException exceptSql)
         {
@@ -180,21 +180,21 @@ public class CWE89_SQL_Injection__database_executeQuery_42 extends AbstractTestC
 
     private void goodG2B() throws Throwable
     {
-        String data = goodG2BSource();
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
         ResultSet resultSet = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-            resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
+            
+            sqlStatement.setString(1, goodG2BSource());
 
-            IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+            resultSet = sqlStatement.execute();
+            IO.writeLine(resultSet.getRow());
         }
         catch (SQLException exceptSql)
         {

@@ -16,6 +16,7 @@ Template File: sources-sinks-67b.tmpl.java
  * */
 
 package testcases.CWE89_SQL_Injection.s01;
+import java.sql.PreparedStatement;
 import testcasesupport.*;
 
 import javax.servlet.http.*;
@@ -28,19 +29,19 @@ public class CWE89_SQL_Injection__connect_tcp_executeUpdate_67b
 {
     public void badSink(CWE89_SQL_Injection__connect_tcp_executeUpdate_67a.Container dataContainer ) throws Throwable
     {
-        String data = dataContainer.containerOne;
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeUpdate(), which could result in SQL Injection */
-            int rowCount = sqlStatement.executeUpdate("insert into users (status) values ('updated') where name='"+data+"'");
+            
+            sqlStatement.setString(1, dataContainer.containerOne);
 
+            int rowCount = sqlStatement.execute();
             IO.writeLine("Updated " + rowCount + " rows successfully.");
         }
         catch (SQLException exceptSql)
@@ -79,19 +80,19 @@ public class CWE89_SQL_Injection__connect_tcp_executeUpdate_67b
     /* goodG2B() - use goodsource and badsink */
     public void goodG2BSink(CWE89_SQL_Injection__connect_tcp_executeUpdate_67a.Container dataContainer ) throws Throwable
     {
-        String data = dataContainer.containerOne;
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeUpdate(), which could result in SQL Injection */
-            int rowCount = sqlStatement.executeUpdate("insert into users (status) values ('updated') where name='"+data+"'");
+            
+            sqlStatement.setString(1, dataContainer.containerOne);
 
+            int rowCount = sqlStatement.execute();
             IO.writeLine("Updated " + rowCount + " rows successfully.");
         }
         catch (SQLException exceptSql)

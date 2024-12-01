@@ -16,6 +16,7 @@ Template File: sources-sinks-05.tmpl.java
 * */
 
 package testcases.CWE89_SQL_Injection.s01;
+import java.sql.PreparedStatement;
 import testcasesupport.*;
 
 import javax.servlet.http.*;
@@ -98,15 +99,16 @@ public class CWE89_SQL_Injection__console_readLine_executeQuery_05 extends Abstr
         if (privateTrue)
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             ResultSet resultSet = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-                resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
-                IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+                sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
+                
+                sqlStatement.setString(1, data);
+                resultSet = sqlStatement.execute();
+                IO.writeLine(resultSet.getRow());
             }
             catch (SQLException exceptSql)
             {
@@ -174,15 +176,16 @@ public class CWE89_SQL_Injection__console_readLine_executeQuery_05 extends Abstr
         if (privateTrue)
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             ResultSet resultSet = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-                resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
-                IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+                sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
+                
+                sqlStatement.setString(1, data);
+                resultSet = sqlStatement.execute();
+                IO.writeLine(resultSet.getRow());
             }
             catch (SQLException exceptSql)
             {
@@ -248,15 +251,16 @@ public class CWE89_SQL_Injection__console_readLine_executeQuery_05 extends Abstr
         if (privateTrue)
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             ResultSet resultSet = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-                resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
-                IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+                sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
+                
+                sqlStatement.setString(1, data);
+                resultSet = sqlStatement.execute();
+                IO.writeLine(resultSet.getRow());
             }
             catch (SQLException exceptSql)
             {

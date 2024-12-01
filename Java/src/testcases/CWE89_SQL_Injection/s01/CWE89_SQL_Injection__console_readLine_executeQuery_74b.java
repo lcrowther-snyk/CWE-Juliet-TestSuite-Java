@@ -16,6 +16,7 @@ Template File: sources-sinks-74b.tmpl.java
  * */
 
 package testcases.CWE89_SQL_Injection.s01;
+import java.sql.PreparedStatement;
 import testcasesupport.*;
 import java.util.HashMap;
 
@@ -29,21 +30,21 @@ public class CWE89_SQL_Injection__console_readLine_executeQuery_74b
 {
     public void badSink(HashMap<Integer,String> dataHashMap ) throws Throwable
     {
-        String data = dataHashMap.get(2);
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
         ResultSet resultSet = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-            resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
+            
+            sqlStatement.setString(1, dataHashMap.get(2));
 
-            IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+            resultSet = sqlStatement.execute();
+            IO.writeLine(resultSet.getRow());
         }
         catch (SQLException exceptSql)
         {
@@ -93,21 +94,21 @@ public class CWE89_SQL_Injection__console_readLine_executeQuery_74b
     /* goodG2B() - use GoodSource and BadSink */
     public void goodG2BSink(HashMap<Integer,String> dataHashMap ) throws Throwable
     {
-        String data = dataHashMap.get(2);
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
         ResultSet resultSet = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-            resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
+            
+            sqlStatement.setString(1, dataHashMap.get(2));
 
-            IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+            resultSet = sqlStatement.execute();
+            IO.writeLine(resultSet.getRow());
         }
         catch (SQLException exceptSql)
         {

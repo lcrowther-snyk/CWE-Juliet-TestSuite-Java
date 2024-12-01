@@ -16,6 +16,7 @@ Template File: sources-sinks-74b.tmpl.java
  * */
 
 package testcases.CWE89_SQL_Injection.s01;
+import java.sql.PreparedStatement;
 import testcasesupport.*;
 import java.util.HashMap;
 
@@ -32,16 +33,17 @@ public class CWE89_SQL_Injection__connect_tcp_execute_74b
         String data = dataHashMap.get(2);
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in execute(), which could result in SQL Injection */
-            Boolean result = sqlStatement.execute("insert into users (status) values ('updated') where name='"+data+"'");
+            
+            sqlStatement.setString(1, dataHashMap.get(2));
 
+            Boolean result = sqlStatement.execute();
             if(result)
             {
                 IO.writeLine("Name, " + data + ", updated successfully");
@@ -90,16 +92,17 @@ public class CWE89_SQL_Injection__connect_tcp_execute_74b
         String data = dataHashMap.get(2);
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in execute(), which could result in SQL Injection */
-            Boolean result = sqlStatement.execute("insert into users (status) values ('updated') where name='"+data+"'");
+            
+            sqlStatement.setString(1, dataHashMap.get(2));
 
+            Boolean result = sqlStatement.execute();
             if(result)
             {
                 IO.writeLine("Name, " + data + ", updated successfully");

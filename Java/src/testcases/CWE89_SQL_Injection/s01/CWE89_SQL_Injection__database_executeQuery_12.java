@@ -109,15 +109,16 @@ public class CWE89_SQL_Injection__database_executeQuery_12 extends AbstractTestC
         if(IO.staticReturnsTrueOrFalse())
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             ResultSet resultSet = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-                resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
-                IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+                sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
+                
+                sqlStatement.setString(1, data);
+                resultSet = sqlStatement.execute();
+                IO.writeLine(resultSet.getRow());
             }
             catch (SQLException exceptSql)
             {
@@ -247,15 +248,16 @@ public class CWE89_SQL_Injection__database_executeQuery_12 extends AbstractTestC
         if(IO.staticReturnsTrueOrFalse())
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             ResultSet resultSet = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-                resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
-                IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+                sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
+                
+                sqlStatement.setString(1, data);
+                resultSet = sqlStatement.execute();
+                IO.writeLine(resultSet.getRow());
             }
             catch (SQLException exceptSql)
             {
@@ -304,18 +306,19 @@ public class CWE89_SQL_Injection__database_executeQuery_12 extends AbstractTestC
         {
 
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             ResultSet resultSet = null;
 
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
+                sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
 
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-                resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
+                
+                sqlStatement.setString(1, data);
 
-                IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+                resultSet = sqlStatement.execute();
+                IO.writeLine(resultSet.getRow());
             }
             catch (SQLException exceptSql)
             {
