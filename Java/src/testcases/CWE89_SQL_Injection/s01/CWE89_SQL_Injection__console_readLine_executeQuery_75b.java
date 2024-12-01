@@ -16,6 +16,7 @@ Template File: sources-sinks-75b.tmpl.java
  * */
 
 package testcases.CWE89_SQL_Injection.s01;
+import java.sql.PreparedStatement;
 import testcasesupport.*;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
@@ -39,21 +40,21 @@ public class CWE89_SQL_Injection__console_readLine_executeQuery_75b
         {
             streamByteArrayInput = new ByteArrayInputStream(dataSerialized);
             streamObjectInput = new ObjectInputStream(streamByteArrayInput);
-            String data = (String)streamObjectInput.readObject();
 
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             ResultSet resultSet = null;
 
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
+                sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
 
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-                resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
+                
+                sqlStatement.setString(1, (String)streamObjectInput.readObject());
 
-                IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+                resultSet = sqlStatement.execute();
+                IO.writeLine(resultSet.getRow());
             }
             catch (SQLException exceptSql)
             {
@@ -146,21 +147,21 @@ public class CWE89_SQL_Injection__console_readLine_executeQuery_75b
         try {
             streamByteArrayInput = new ByteArrayInputStream(dataSerialized);
             streamObjectInput = new ObjectInputStream(streamByteArrayInput);
-            String data = (String)streamObjectInput.readObject();
 
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             ResultSet resultSet = null;
 
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
+                sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
 
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-                resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
+                
+                sqlStatement.setString(1, (String)streamObjectInput.readObject());
 
-                IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+                resultSet = sqlStatement.execute();
+                IO.writeLine(resultSet.getRow());
             }
             catch (SQLException exceptSql)
             {

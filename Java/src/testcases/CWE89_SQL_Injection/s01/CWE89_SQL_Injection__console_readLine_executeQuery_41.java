@@ -16,6 +16,7 @@ Template File: sources-sinks-41.tmpl.java
  * */
 
 package testcases.CWE89_SQL_Injection.s01;
+import java.sql.PreparedStatement;
 import testcasesupport.*;
 
 import javax.servlet.http.*;
@@ -35,18 +36,19 @@ public class CWE89_SQL_Injection__console_readLine_executeQuery_41 extends Abstr
     {
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
         ResultSet resultSet = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-            resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
+            
+            sqlStatement.setString(1, data);
 
-            IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+            resultSet = sqlStatement.execute();
+            IO.writeLine(resultSet.getRow());
         }
         catch (SQLException exceptSql)
         {
@@ -158,18 +160,19 @@ public class CWE89_SQL_Injection__console_readLine_executeQuery_41 extends Abstr
     {
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
         ResultSet resultSet = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("select * from users where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeQuery(), which could result in SQL Injection */
-            resultSet = sqlStatement.executeQuery("select * from users where name='"+data+"'");
+            
+            sqlStatement.setString(1, data);
 
-            IO.writeLine(resultSet.getRow()); /* Use ResultSet in some way */
+            resultSet = sqlStatement.execute();
+            IO.writeLine(resultSet.getRow());
         }
         catch (SQLException exceptSql)
         {

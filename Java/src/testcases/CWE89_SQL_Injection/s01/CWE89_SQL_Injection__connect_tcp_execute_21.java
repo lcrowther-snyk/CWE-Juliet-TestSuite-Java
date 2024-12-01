@@ -16,6 +16,7 @@ Template File: sources-sinks-21.tmpl.java
  * */
 
 package testcases.CWE89_SQL_Injection.s01;
+import java.sql.PreparedStatement;
 import testcasesupport.*;
 
 import javax.servlet.http.*;
@@ -115,13 +116,14 @@ public class CWE89_SQL_Injection__connect_tcp_execute_21 extends AbstractTestCas
         if (badPrivate)
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in execute(), which could result in SQL Injection */
-                Boolean result = sqlStatement.execute("insert into users (status) values ('updated') where name='"+data+"'");
+                sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
+                
+                sqlStatement.setString(1, data);
+                Boolean result = sqlStatement.execute();
                 if(result)
                 {
                     IO.writeLine("Name, " + data + ", updated successfully");
@@ -465,13 +467,14 @@ public class CWE89_SQL_Injection__connect_tcp_execute_21 extends AbstractTestCas
         if (goodG2BPrivate)
         {
             Connection dbConnection = null;
-            Statement sqlStatement = null;
+            PreparedStatement sqlStatement = null;
             try
             {
                 dbConnection = IO.getDBConnection();
-                sqlStatement = dbConnection.createStatement();
-                /* POTENTIAL FLAW: data concatenated into SQL statement used in execute(), which could result in SQL Injection */
-                Boolean result = sqlStatement.execute("insert into users (status) values ('updated') where name='"+data+"'");
+                sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
+                
+                sqlStatement.setString(1, data);
+                Boolean result = sqlStatement.execute();
                 if(result)
                 {
                     IO.writeLine("Name, " + data + ", updated successfully");

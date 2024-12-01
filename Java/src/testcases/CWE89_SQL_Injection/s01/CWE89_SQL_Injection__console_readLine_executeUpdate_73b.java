@@ -16,6 +16,7 @@ Template File: sources-sinks-73b.tmpl.java
  * */
 
 package testcases.CWE89_SQL_Injection.s01;
+import java.sql.PreparedStatement;
 import testcasesupport.*;
 import java.util.LinkedList;
 
@@ -29,19 +30,19 @@ public class CWE89_SQL_Injection__console_readLine_executeUpdate_73b
 {
     public void badSink(LinkedList<String> dataLinkedList ) throws Throwable
     {
-        String data = dataLinkedList.remove(2);
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeUpdate(), which could result in SQL Injection */
-            int rowCount = sqlStatement.executeUpdate("insert into users (status) values ('updated') where name='"+data+"'");
+            
+            sqlStatement.setString(1, dataLinkedList.remove(2));
 
+            int rowCount = sqlStatement.execute();
             IO.writeLine("Updated " + rowCount + " rows successfully.");
         }
         catch (SQLException exceptSql)
@@ -80,19 +81,19 @@ public class CWE89_SQL_Injection__console_readLine_executeUpdate_73b
     /* goodG2B() - use GoodSource and BadSink */
     public void goodG2BSink(LinkedList<String> dataLinkedList ) throws Throwable
     {
-        String data = dataLinkedList.remove(2);
 
         Connection dbConnection = null;
-        Statement sqlStatement = null;
+        PreparedStatement sqlStatement = null;
 
         try
         {
             dbConnection = IO.getDBConnection();
-            sqlStatement = dbConnection.createStatement();
+            sqlStatement = dbConnection.prepareStatement("insert into users (status) values ('updated') where name=?");
 
-            /* POTENTIAL FLAW: data concatenated into SQL statement used in executeUpdate(), which could result in SQL Injection */
-            int rowCount = sqlStatement.executeUpdate("insert into users (status) values ('updated') where name='"+data+"'");
+            
+            sqlStatement.setString(1, dataLinkedList.remove(2));
 
+            int rowCount = sqlStatement.execute();
             IO.writeLine("Updated " + rowCount + " rows successfully.");
         }
         catch (SQLException exceptSql)
